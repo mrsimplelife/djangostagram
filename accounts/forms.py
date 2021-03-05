@@ -1,8 +1,19 @@
 from typing import Any
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ValidationError
-from accounts.models import User
-# from django import forms
+from django import forms
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
+
+
+class ProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ['avatar', 'first_name', 'last_name',
+                  'website_url', 'bio', 'phone_number', 'gender']
 
 
 class SignupForm(UserCreationForm):

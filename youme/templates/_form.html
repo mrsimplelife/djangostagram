@@ -5,9 +5,9 @@
     <div class="card-header">{{ form_title }}</div>
     {% endif %}
     <div class="card-body">
+      {% if form %}
       <form action="" method="POST" enctype="multipart/form-data">
-        {% csrf_token %} {% bootstrap_form form %} 
-        {% buttons %}
+        {% csrf_token %} {% bootstrap_form form %} {% buttons %}
         <div class="d-grid mt-3 mb-3">
           <button type="submit" class="btn btn-primary">
             {{submit_label|default:'submit'}}
@@ -15,6 +15,9 @@
         </div>
         {% endbuttons %}
       </form>
+      {% else %}
+      <div class="alert alert-danger">need form</div>
+      {% endif %}
     </div>
   </div>
 </div>
