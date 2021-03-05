@@ -1,0 +1,14 @@
+{% load bootstrap5 %}
+<div class="col-sm-6 offset-sm-3">
+  <form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %} 
+    {% bootstrap_form form %} 
+    {% buttons %}
+    <div class="d-grid mt-3 mb-3">
+      <button type="submit" class="btn btn-primary">
+        {{submit_label|default:'submit'}}
+      </button>
+    </div>
+    {% endbuttons %}
+  </form>
+</div>
