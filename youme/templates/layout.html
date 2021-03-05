@@ -101,7 +101,14 @@
                     ></path>
                   </svg>
                 </a>
-                <a class="p-2 text-dark" href="#">{{user}} profile</a>
+                <a class="p-2 text-dark" href="#">
+                  {{user}}
+                  <img
+                    style="width: 24px; border-radius: 50%"
+                    src="{% url 'pydenticon_image' user.username %}"
+                    alt="{{user.username}}"
+                  />
+                </a>
               </nav>
             </header>
           </div>

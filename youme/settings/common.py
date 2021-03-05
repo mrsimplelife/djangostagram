@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'debug_toolbar',
     'bootstrap5',
+    'django_pydenticon',
 
     'accounts',
 ]

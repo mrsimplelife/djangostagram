@@ -9,6 +9,7 @@ from accounts.forms import SignupForm
 
 class MyLoginView(LoginView):
     template_name = 'accounts/login_form.html'
+    redirect_authenticated_user = True
 
     def form_valid(self, form) -> HttpResponse:
         messages.success(self.request, 'login success!!')
