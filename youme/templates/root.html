@@ -1,3 +1,5 @@
-{% extends 'layout.html' %} 
-{% block content %} djangostagram 
+{% extends 'layout.html' %} {% block content %} 
+djangostagram
+<hr />
+<a href="{% url 'instagram:post_new' %}" class="btn btn-primary">new post</a>
 {% endblock content %}

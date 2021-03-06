@@ -14,6 +14,7 @@ urlpatterns: List[Union[URLPattern, URLResolver]] = [
     path(
         "", login_required(TemplateView.as_view(template_name="root.html")), name="root"
     ),
+    path("", include("instagram.urls")),
     path("accounts/", include("accounts.urls")),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

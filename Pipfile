@@ -12,6 +12,7 @@ Django = "==3.1.7"
 [dev-packages]
 ipykernel = "*"
 django-debug-toolbar = "*"
+django-stubs = "*"
 
 [requires]
 python_version = "3.8"

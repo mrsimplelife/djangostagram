@@ -20,7 +20,7 @@ class MyPasswordChangeView(LoginRequiredMixin, auth_views.PasswordChangeView):
     template_name = "accounts/password_change_form.html"
     form_class = PasswordChangeForm
 
-    def form_valid(self, form: ModelForm) -> HttpResponse:
+    def form_valid(self, form) -> HttpResponse:
         messages.success(self.request, "password changed!!")
         return super().form_valid(form)
 
@@ -61,7 +61,8 @@ def profile_edit(request: HttpRequest):
             form.save()
             messages.success(request, "profile edited!!")
             redirect("/")
-    form = ProfileForm(instance=request.user)
+    else:
+        form = ProfileForm(instance=request.user)
     return render(request, "accounts/profile_edit_form.html", {"form": form})
 
 

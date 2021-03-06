@@ -26,7 +26,9 @@ SECRET_KEY = "1j=bj8_dy@e&1awdcrj!zn2l7+b+m6d_^29y35+u$v)pmr%7g("
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+]
 
 
 # Application definition
@@ -42,6 +44,7 @@ INSTALLED_APPS = [
     "bootstrap5",
     "django_pydenticon",
     "accounts",
+    "instagram",
 ]
 
 MIDDLEWARE = [
