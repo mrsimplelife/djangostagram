@@ -1,4 +1,10 @@
 {% extends 'accounts/layout.html' %} 
 {% block content %}
-{% include '_form.html' with submit_label='login' form_title='login' %}
-{% endblock content %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6 offset-sm-3">
+      {% include '_form.html' with form_title='로그인' submit_label='로그인' %}
+    </div>
+  </div>
+</div>
+{% endblock %}

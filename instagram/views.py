@@ -47,12 +47,6 @@ def post_detail(request, pk):
 def user_page(request, username):
     page_user = get_object_or_404(User, username=username, is_active=True)
     post_list = Post.objects.filter(author=page_user)
-    # post_list_count = post_list.count()  # 실제 데이터베이스에 count 쿼리를 던지게 됩니다.
-
-    # if request.user.is_authenticated:
-    #     is_follow = request.user.following_set.filter(pk=page_user.pk).exists()
-    # else:
-    #     is_follow = False
 
     return render(
         request,
@@ -60,7 +54,15 @@ def user_page(request, username):
         {
             "page_user": page_user,
             "post_list": post_list,
-            # "post_list_count": post_list_count,
-            # "is_follow": is_follow,
         },
+    )
+
+
+@login_required
+def index(request):
+
+    return render(
+        request,
+        "instagram/index.html",
+        {},
     )

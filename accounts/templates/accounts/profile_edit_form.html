@@ -1,4 +1,10 @@
 {% extends 'accounts/layout.html' %} 
 {% block content %}
-{% include '_form.html' with submit_label='edit' form_title='profile' %}
-{% endblock content %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6 offset-sm-3">
+      {% include '_form.html' with form_title='프로필 수정' submit_label='프로필 수정' %}
+    </div>
+  </div>
+</div>
+{% endblock %}
