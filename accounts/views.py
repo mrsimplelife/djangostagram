@@ -1,7 +1,6 @@
 from django.contrib import messages
-from django.forms.models import ModelForm
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.contrib.auth.views import LoginView, logout_then_login
 from django.contrib.auth import login as auth_login, get_user_model
@@ -13,6 +12,24 @@ from django.urls import reverse_lazy
 from accounts.forms import PasswordChangeForm, ProfileForm, SignupForm
 
 User = get_user_model()
+
+
+@login_required
+def follow(request, username):
+    follow_user = get_object_or_404(User, username=username, is_active=True)
+    request.user.following_set.add(follow_user)
+    messages.success(request, f"followed {follow_user}!")
+    redirect_url = request.META.get("HTTP_REFERER", "root")
+    return redirect(redirect_url)
+
+
+@login_required
+def unfollow(request, username):
+    unfollow_user = get_object_or_404(User, username=username, is_active=True)
+    request.user.following_set.remove(unfollow_user)
+    messages.success(request, f"unfollowed {unfollow_user}!!")
+    redirect_url = request.META.get("HTTP_REFERER", "root")
+    return redirect(redirect_url)
 
 
 class MyPasswordChangeView(LoginRequiredMixin, auth_views.PasswordChangeView):
@@ -69,6 +86,7 @@ def profile_edit(request: HttpRequest):
 class MyLoginView(LoginView):
     template_name = "accounts/login_form.html"
     redirect_authenticated_user = True
+    redirect_field_name = reverse_lazy("instagram:index")
 
     def form_valid(self, form) -> HttpResponse:
         messages.success(self.request, "login success!!")

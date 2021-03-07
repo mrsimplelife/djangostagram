@@ -23,7 +23,7 @@
       {% endif %}
 
       <hr />
-      {{ post_list_count }} posts, 0 followers, 0 following
+      {{ post_list_count }} posts, {{page_user.follower_set.count}}  followers, {{page_user.following_set.count}} following
       <hr />
       {{ page_user.name }}
     </div>

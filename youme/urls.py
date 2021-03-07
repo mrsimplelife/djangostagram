@@ -4,8 +4,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import URLPattern, URLResolver, include, path
 import debug_toolbar
+from django.urls.converters import register_converter
 from django.views.generic.base import RedirectView
 from django_pydenticon.views import image as pydenticon_image
+from youme.converters import UsernameConverter
+
+register_converter(UsernameConverter, "username")
 
 urlpatterns: List[Union[URLPattern, URLResolver]] = [
     path("admin/", admin.site.urls),

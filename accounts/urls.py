@@ -8,4 +8,6 @@ urlpatterns = [
     path("logout/", views.logout, name="logout"),
     path("edit/", views.profile_edit, name="edit"),
     path("password_change/", views.password_change, name="password_change"),
+    path("<username:username>/follow", views.follow, name="follow"),
+    path("<username:username>/unfollow", views.unfollow, name="unfollow"),
 ]

@@ -22,6 +22,9 @@ class User(AbstractUser):
         upload_to="accounts/profile/%Y/%m/%d",
         help_text="48px * 48px png/jpg file!!",
     )
+    follower_set = models.ManyToManyField(
+        "self", blank=True, symmetrical=False, related_name="following_set"
+    )
 
     @property
     def name(self):

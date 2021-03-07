@@ -1,8 +1,6 @@
-from instagram.converters import UsernameConverter
-from django.urls import path, register_converter
+from django.urls import path
 from instagram import views
 
-register_converter(UsernameConverter, "username")
 
 app_name = "instagram"
 urlpatterns = [

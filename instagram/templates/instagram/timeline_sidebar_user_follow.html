@@ -7,11 +7,11 @@
     />
   </div>
   <div>
-    <a href="{% url 'instagram:user_page' suggested_user.username %}">
+    {% comment %} <a href="{% url 'instagram:user_page' suggested_user.username %}"> {% endcomment %}
       {{ suggested_user.username }}
-    </a>
+    {% comment %} </a> {% endcomment %}
   </div>
-  <div class="ml-auto">
-    <a href="{% url 'user_follow' suggested_user.username %}">Follow</a>
+  <div class="ms-auto">
+    <a href="{% url 'accounts:follow' suggested_user.username %}">Follow</a>
   </div>
 </div>
