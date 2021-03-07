@@ -26,8 +26,8 @@
     </div>
 
     <div id="post-{{ post.pk }}-comment-list" class="comment-list mt-3 mb-3">
-      {% for comment in post.comment_set.all %}
-      {% include 'instagram/_comment.html' %}
+      {% for comment in post.comment_set.all %} 
+      {% include 'instagram/_comment.html' %} 
       {% endfor %}
     </div>
 
@@ -44,21 +44,19 @@
     </div>
   </div>
   <div class="card-footer">
-    <a href="{% url 'instagram:comment_new' post.pk%}">댓글쓰기</a>
-    {% comment %}
+    {% comment %} <a href="{% url 'instagram:comment_new' post.pk%}">댓글쓰기</a> {% endcomment %}
     <form
       id="post-{{ post.pk }}-comment-form"
       action="{% url 'instagram:comment_new' post.pk %}"
       method="POST"
     >
-      {% csrf_token %} {% bootstrap_form comment_form %}
-      <input
-        type="submit"
-        value="댓글 쓰기"
-        class="btn btn-primary btn-block"
-      />
+      {% csrf_token %} 
+      {% bootstrap_form comment_form %} {% buttons %}
+      <div class="d-grid mt-3 mb-3">
+        <button type="submit" class="btn btn-primary">댓글 쓰기</button>
+      </div>
+      {% endbuttons %}
     </form>
-    {% endcomment %}
   </div>
 </div>
 {% comment %}

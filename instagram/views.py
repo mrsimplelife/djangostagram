@@ -36,24 +36,6 @@ def comment_new(request, post_pk):
 
 
 @login_required
-def post_unlike(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    post.like_user_set.remove(request.user)
-    messages.success(request, f"unliked #{post.pk}")
-    redirect_url = request.META.get("HTTP_REFERER", "root")
-    return redirect(redirect_url)
-
-
-@login_required
-def post_like(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    post.like_user_set.add(request.user)
-    messages.success(request, f"liked #{post.pk}")
-    redirect_url = request.META.get("HTTP_REFERER", "root")
-    return redirect(redirect_url)
-
-
-@login_required
 def post_new(request: HttpRequest):
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
@@ -78,13 +60,30 @@ def post_new(request: HttpRequest):
 @login_required
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    comment_form = CommentForm()
     return render(
         request,
         "instagram/post_detail.html",
-        {
-            "post": post,
-        },
+        {"post": post, "comment_form": comment_form},
     )
+
+
+@login_required
+def post_unlike(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.like_user_set.remove(request.user)
+    messages.success(request, f"unliked #{post.pk}")
+    redirect_url = request.META.get("HTTP_REFERER", "root")
+    return redirect(redirect_url)
+
+
+@login_required
+def post_like(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.like_user_set.add(request.user)
+    messages.success(request, f"liked #{post.pk}")
+    redirect_url = request.META.get("HTTP_REFERER", "root")
+    return redirect(redirect_url)
 
 
 @login_required
@@ -121,8 +120,13 @@ def index(request):
         .filter(Q(author=request.user) | Q(author__in=request.user.following_set.all()))
         .filter(created_at__gte=timesince)
     )
+    comment_form = CommentForm()
     return render(
         request,
         "instagram/index.html",
-        {"suggested_user_list": suggested_user_list, "post_list": post_list},
+        {
+            "comment_form": comment_form,
+            "suggested_user_list": suggested_user_list,
+            "post_list": post_list,
+        },
     )
