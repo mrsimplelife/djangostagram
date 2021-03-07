@@ -19,7 +19,8 @@
   <body>
     {% for message in messages %}
     <div class="alert alert-{{message.tags}}">{{message}}</div>
-    {% endfor %} {% if user.is_authenticated %}
+    {% endfor %} 
+    {% if user.is_authenticated %}
     <div class="border-bottom mb-3">
       <div class="container">
         <div class="row">
