@@ -105,11 +105,7 @@
                   {{user}}
                   <img
                     style="width: 24px; border-radius: 50%"
-                    {% if user.avatar %}
-                    src="{{user.avatar.url}}"
-                    {% else %}
-                    src="{% url 'pydenticon_image' user.username %}"
-                    {% endif %}
+                    src="{{user.avatar_url}}"
                     alt="{{user.username}}"
                   />
                 </a>

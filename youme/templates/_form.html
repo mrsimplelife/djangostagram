@@ -1,10 +1,13 @@
 {% load bootstrap5 %}
 <div class="col-sm-6 offset-sm-3">
   <div class="card">
+
     {% if form_title %}
     <div class="card-header">{{ form_title }}</div>
     {% endif %}
+
     <div class="card-body">
+
       {% if form %}
       <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %} {% bootstrap_form form %} {% buttons %}
@@ -18,6 +21,7 @@
       {% else %}
       <div class="alert alert-danger">need form</div>
       {% endif %}
+      
     </div>
   </div>
 </div>

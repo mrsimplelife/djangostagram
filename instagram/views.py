@@ -1,7 +1,7 @@
 from instagram.models import Post
 from instagram.forms import PostForm
 from django.http import HttpRequest
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -16,7 +16,7 @@ def post_new(request: HttpRequest):
             post.save()
             post.extract_tag_list()
             messages.success(request, "post saved!!")
-            return redirect("/")
+            return redirect(post)
     else:
         form = PostForm()
     return render(
@@ -24,5 +24,16 @@ def post_new(request: HttpRequest):
         "instagram/post_form.html",
         {
             "form": form,
+        },
+    )
+
+
+def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    return render(
+        request,
+        "instagram/post_detail.html",
+        {
+            "post": post,
         },
     )
