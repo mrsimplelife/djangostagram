@@ -1,5 +1,4 @@
-{% comment %} {% load bootstrap5 humanize instagram_tags %} {% endcomment %} 
-{% load bootstrap5 instagram_tags %}
+{% load bootstrap5 instagram_tags humanize %}
 
 <div class="card">
   <div class="card-header">
@@ -26,12 +25,11 @@
       {% endif %}
     </div>
 
-    {% comment %}
     <div id="post-{{ post.pk }}-comment-list" class="comment-list mt-3 mb-3">
-      {% for comment in post.comment_set.all %} {%
-      include'instagram/_comment.html' %} {% endfor %}
+      {% for comment in post.comment_set.all %}
+      {% include 'instagram/_comment.html' %}
+      {% endfor %}
     </div>
-    {% endcomment %}
 
     <div>
       {% for tag in post.tag_set.all %}
@@ -41,11 +39,12 @@
 
     <div>
       <a href="{{ post.get_absolute_url }}" style="" class="text-muted">
-        {% comment %} <small> {{ post.created_at|naturaltime }} </small> {% endcomment %}
+        <small> {{ post.created_at|naturaltime }} </small>
       </a>
     </div>
   </div>
   <div class="card-footer">
+    <a href="{% url 'instagram:comment_new' post.pk%}">댓글쓰기</a>
     {% comment %}
     <form
       id="post-{{ post.pk }}-comment-form"
@@ -59,31 +58,31 @@
         class="btn btn-primary btn-block"
       />
     </form>
-    {% endcomment %} 
-    {% comment %}
-    <script>
-      $(function () {
-        var form_id = 'post-{{ post.pk }}-comment-form';
-        $('#' + form_id).submit(function (e) {
-          e.preventDefault();
-
-          var options = {
-            success: function (responseText, statusText, xhr, $form) {
-              console.group('ajaxSubmit response');
-              console.log(responseText);
-              console.log(statusText);
-              console.log(xhr);
-              console.log($form);
-              console.groupEnd();
-
-              $('#post-10-comment-list').prepend(responseText);
-            },
-          };
-          $(this).ajaxSubmit(options);
-        });
-        console.log('document ready.');
-      });
-    </script>
     {% endcomment %}
   </div>
 </div>
+{% comment %}
+<script>
+  $(function () {
+    var form_id = 'post-{{ post.pk }}-comment-form';
+    $('#' + form_id).submit(function (e) {
+      e.preventDefault();
+
+      var options = {
+        success: function (responseText, statusText, xhr, $form) {
+          console.group('ajaxSubmit response');
+          console.log(responseText);
+          console.log(statusText);
+          console.log(xhr);
+          console.log($form);
+          console.groupEnd();
+
+          $('#post-10-comment-list').prepend(responseText);
+        },
+      };
+      $(this).ajaxSubmit(options);
+    });
+    console.log('document ready.');
+  });
+</script>
+{% endcomment %}

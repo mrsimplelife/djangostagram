@@ -1,7 +1,7 @@
 from datetime import timedelta
 from django.db.models.query_utils import Q
 from instagram.models import Post
-from instagram.forms import PostForm
+from instagram.forms import CommentForm, PostForm
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
@@ -10,6 +10,29 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 User = get_user_model()
+
+
+@login_required
+def comment_new(request, post_pk):
+    post = get_object_or_404(Post, pk=post_pk)
+
+    if request.method == "POST":
+        form = CommentForm(request.POST, request.FILES)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+            return redirect(comment.post)
+    else:
+        form = CommentForm()
+    return render(
+        request,
+        "instagram/comment_form.html",
+        {
+            "form": form,
+        },
+    )
 
 
 @login_required
