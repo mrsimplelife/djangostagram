@@ -1,4 +1,5 @@
 from datetime import timedelta
+from sys import prefix
 from django.db.models.query_utils import Q
 from instagram.models import Post
 from instagram.forms import CommentForm, PostForm
@@ -13,9 +14,8 @@ User = get_user_model()
 
 
 @login_required
-def comment_new(request, post_pk):
+def comment_new(request: HttpRequest, post_pk):
     post = get_object_or_404(Post, pk=post_pk)
-
     if request.method == "POST":
         form = CommentForm(request.POST, request.FILES)
         if form.is_valid():
@@ -23,6 +23,14 @@ def comment_new(request, post_pk):
             comment.post = post
             comment.author = request.user
             comment.save()
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return render(
+                    request,
+                    "instagram/_comment.html",
+                    {
+                        "comment": comment,
+                    },
+                )
             return redirect(comment.post)
     else:
         form = CommentForm()
@@ -120,7 +128,7 @@ def index(request):
         .filter(Q(author=request.user) | Q(author__in=request.user.following_set.all()))
         .filter(created_at__gte=timesince)
     )
-    comment_form = CommentForm()
+    comment_form = CommentForm(auto_id=False)
     return render(
         request,
         "instagram/index.html",

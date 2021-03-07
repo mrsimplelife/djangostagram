@@ -44,14 +44,15 @@
     </div>
   </div>
   <div class="card-footer">
-    {% comment %} <a href="{% url 'instagram:comment_new' post.pk%}">댓글쓰기</a> {% endcomment %}
+    {% comment %}
+    <a href="{% url 'instagram:comment_new' post.pk%}">댓글쓰기</a>
+    {% endcomment %}
     <form
       id="post-{{ post.pk }}-comment-form"
       action="{% url 'instagram:comment_new' post.pk %}"
       method="POST"
     >
-      {% csrf_token %} 
-      {% bootstrap_form comment_form %} {% buttons %}
+      {% csrf_token %} {% bootstrap_form comment_form %} {% buttons %}
       <div class="d-grid mt-3 mb-3">
         <button type="submit" class="btn btn-primary">댓글 쓰기</button>
       </div>
@@ -59,28 +60,37 @@
     </form>
   </div>
 </div>
-{% comment %}
+
 <script>
-  $(function () {
-    var form_id = 'post-{{ post.pk }}-comment-form';
-    $('#' + form_id).submit(function (e) {
-      e.preventDefault();
-
-      var options = {
-        success: function (responseText, statusText, xhr, $form) {
-          console.group('ajaxSubmit response');
-          console.log(responseText);
-          console.log(statusText);
-          console.log(xhr);
-          console.log($form);
-          console.groupEnd();
-
-          $('#post-10-comment-list').prepend(responseText);
+  document
+    .querySelector(`#${'post-{{ post.pk }}-comment-form'}`)
+    .addEventListener('submit', function () {
+      event.preventDefault();
+      const csrftoken = this.querySelector('[name=csrfmiddlewaretoken]').value;
+      const message = this.querySelector('[name="message"]').value;
+      const request = new Request(this.action, {
+        headers: {
+          'X-CSRFToken': csrftoken,
+          'X-Requested-With': 'XMLHttpRequest',
         },
+      });
+      const formdata = new FormData();
+      formdata.append('message', message);
+      const requestOptions = {
+        method: 'POST',
+        mode: 'same-origin',
+        body: formdata,
+        redirect: 'follow',
       };
-      $(this).ajaxSubmit(options);
+      fetch(request, requestOptions)
+        .then((response) => response.text())
+        .then((result) => {
+          const template = document.createElement('template');
+          template.innerHTML = result.trim();
+          document
+            .querySelector('#post-{{ post.pk }}-comment-list')
+            .prepend(template.content);
+        })
+        .catch((error) => console.log('error', error));
     });
-    console.log('document ready.');
-  });
 </script>
-{% endcomment %}
