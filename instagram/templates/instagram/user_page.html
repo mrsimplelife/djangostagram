@@ -9,16 +9,19 @@
       />
     </div>
     <div class="col-sm-9">
-      {{ page_user.username }} {% if isMine %}
+      {{ page_user.username }} 
+      {% if isMine %}
       <a href="{% url 'accounts:edit' %}" class="btn btn-secondary btn-sm">
         Edit Profile
       </a>
-      {% endif %} {% if is_follow %}
+      {% endif %} 
+      {% if not isMine %}
+      {% if is_follow %}
       <a href="{% url 'accounts:unfollow' page_user.username %}">Unfollow</a>
       {% else %}
       <a href="{% url 'accounts:follow' page_user.username %}">Follow</a>
       {% endif %}
-
+      {% endif %}
       <hr />
       {{ post_list_count }} posts, {{page_user.follower_set.count}} followers,
       {{page_user.following_set.count}} following
