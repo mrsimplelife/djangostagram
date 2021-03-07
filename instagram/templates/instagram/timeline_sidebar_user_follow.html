@@ -7,9 +7,9 @@
     />
   </div>
   <div>
-    {% comment %} <a href="{% url 'instagram:user_page' suggested_user.username %}"> {% endcomment %}
+    <a href="{% url 'instagram:user_page' suggested_user.username %}">
       {{ suggested_user.username }}
-    {% comment %} </a> {% endcomment %}
+    </a>
   </div>
   <div class="ms-auto">
     <a href="{% url 'accounts:follow' suggested_user.username %}">Follow</a>

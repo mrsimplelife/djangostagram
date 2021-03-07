@@ -1,6 +1,4 @@
-{% extends 'instagram/layout.html' %} 
-{% load thumbnail %} 
-{% block content %}
+{% extends 'instagram/layout.html' %} {% load thumbnail %} {% block content %}
 <div class="container">
   <div class="row pt-5 pb-5">
     <div class="col-sm-3" style="text-align: center">
@@ -11,19 +9,19 @@
       />
     </div>
     <div class="col-sm-9">
-      {{ page_user.username }}
+      {{ page_user.username }} {% if isMine %}
       <a href="{% url 'accounts:edit' %}" class="btn btn-secondary btn-sm">
         Edit Profile
       </a>
-
-      {% if is_follow %}
-      {% comment %} <a href="{% url 'user_unfollow' page_user.username %}">Unfollow</a> {% endcomment %}
+      {% endif %} {% if is_follow %}
+      <a href="{% url 'accounts:unfollow' page_user.username %}">Unfollow</a>
       {% else %}
-      {% comment %} <a href="{% url 'user_follow' page_user.username %}">Follow</a> {% endcomment %}
+      <a href="{% url 'accounts:follow' page_user.username %}">Follow</a>
       {% endif %}
 
       <hr />
-      {{ post_list_count }} posts, {{page_user.follower_set.count}}  followers, {{page_user.following_set.count}} following
+      {{ post_list_count }} posts, {{page_user.follower_set.count}} followers,
+      {{page_user.following_set.count}} following
       <hr />
       {{ page_user.name }}
     </div>

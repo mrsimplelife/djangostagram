@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.db.models.query_utils import Q
 from instagram.models import Post
 from instagram.forms import PostForm
@@ -6,8 +7,27 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 User = get_user_model()
+
+
+@login_required
+def post_unlike(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.like_user_set.remove(request.user)
+    messages.success(request, f"unliked #{post.pk}")
+    redirect_url = request.META.get("HTTP_REFERER", "root")
+    return redirect(redirect_url)
+
+
+@login_required
+def post_like(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.like_user_set.add(request.user)
+    messages.success(request, f"liked #{post.pk}")
+    redirect_url = request.META.get("HTTP_REFERER", "root")
+    return redirect(redirect_url)
 
 
 @login_required
@@ -49,6 +69,8 @@ def user_page(request, username):
     page_user = get_object_or_404(User, username=username, is_active=True)
     post_list = Post.objects.filter(author=page_user)
     post_list_count = post_list.count()
+    is_follow = request.user.following_set.filter(pk=page_user.pk).exists()
+    isMine = request.user == page_user
     return render(
         request,
         "instagram/user_page.html",
@@ -56,6 +78,8 @@ def user_page(request, username):
             "page_user": page_user,
             "post_list": post_list,
             "post_list_count": post_list_count,
+            "is_follow": is_follow,
+            "isMine": isMine,
         },
     )
 
@@ -68,8 +92,11 @@ def index(request):
         .exclude(pk=request.user.pk)
         .exclude(pk__in=request.user.following_set.all())[:3]
     )
-    post_list = Post.objects.all().filter(
-        Q(author=request.user) | Q(author__in=request.user.following_set.all())
+    timesince = timezone.now() - timedelta(days=3)
+    post_list = (
+        Post.objects.all()
+        .filter(Q(author=request.user) | Q(author__in=request.user.following_set.all()))
+        .filter(created_at__gte=timesince)
     )
     return render(
         request,

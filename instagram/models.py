@@ -4,7 +4,15 @@ from django.conf import settings
 from django.urls import reverse
 
 
-class Post(models.Model):
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class Post(BaseModel):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name="my_post_set", on_delete=models.CASCADE
     )
@@ -12,6 +20,9 @@ class Post(models.Model):
     caption = models.CharField(max_length=500)
     tag_set = models.ManyToManyField("Tag", blank=True)
     location = models.CharField(max_length=100)
+    like_user_set = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, blank=True, related_name="like_post_set"
+    )
 
     def __str__(self) -> str:
         return self.caption
@@ -27,6 +38,12 @@ class Post(models.Model):
             tag_list.append(tag)
         # return tag_list
         self.tag_set.add(*tag_list)
+
+    def is_like_user(self, user):
+        return self.like_user_set.filter(pk=user.pk).exists()
+
+    class Meta:
+        ordering = ["-id"]
 
 
 class Tag(models.Model):
